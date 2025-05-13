@@ -1,0 +1,41 @@
+syntax = "proto3";
+package learner;
+
+import "ndarray.proto";
+import "pingpong.proto";
+import "ma_variables.proto";
+
+service LearnerService {
+  rpc Persistence(stream Ping) returns (stream Pong);
+
+  rpc RegisterActor(Empty) returns (RegisterActorResponse);
+
+  rpc GetPolicyVariables(Empty) returns (MAVariables);
+  rpc Add(AddRequest) returns (Empty);
+
+  rpc ForceClose(Empty) returns (Empty);
+}
+
+message RegisterActorResponse{
+  string model_abs_dir = 1;
+  int32 unique_id = 2;
+
+  string reset_config_json = 3;
+  string nn_config_json = 4;
+  map<string, string> ma_nn_configs_json = 5;
+  string sac_config_json = 6;
+  map<string, string> ma_sac_configs_json = 7;
+}
+
+message AddRequest {
+  string ma_name = 1;
+  NDarray l_indexes = 2;
+  NDarray l_padding_masks = 3;
+  repeated NDarray l_obses_list = 4;
+  NDarray l_actions = 5;
+  NDarray l_rewards = 6;
+  repeated NDarray next_obs_list = 7;
+  NDarray l_dones = 8;
+  NDarray l_mu_probs = 9;
+  NDarray l_seq_hidden_states = 10;
+}

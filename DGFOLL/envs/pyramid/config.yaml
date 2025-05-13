@@ -1,0 +1,73 @@
+default:
+  base_config:
+    env_name: RayPyramid
+    unity_args:
+      build_path:
+        win32: D:\Unity\win-RL-Envs\RLEnvironments.exe
+        linux: /data/linux-RL-Envs/RLEnvironments.x86_64
+
+    n_envs: 50
+    max_step: -1
+    reset_on_iteration: false
+
+  reset_config:
+    force_reset: true
+    ray_length: 20
+
+  sac_config:
+    save_model_per_step: 10000
+
+    burn_in_step: 128
+    n_step: 3
+    v_lambda: 0.99
+    seq_encoder: ATTN
+
+    use_rnd: true
+    rnd_n_sample: 50
+
+    action_noise: [0., 1.]
+
+ray_rnn:
+  base_config:
+    name: "rnn_{time}"
+  sac_config:
+    nn: nn_rnn
+    seq_encoder: RNN
+    burn_in_step: 32
+
+ray_nope:
+  base_config:
+    name: "attn_nope_{time}"
+  nn_config:
+    rep:
+      pe: nope
+  sac_config:
+    nn: nn_attn
+
+ray_peadd:
+  base_config:
+    name: "attn_peadd_{time}"
+  nn_config:
+    rep:
+      pe: add
+  sac_config:
+    nn: nn_attn
+
+ray_pecat:
+  base_config:
+    name: "attn_pecat_{time}"
+  nn_config:
+    rep:
+      pe: cat
+  sac_config:
+    nn: nn_attn
+
+ray_nornn:
+  base_config:
+    name: "nornn_{time}"
+  reset_config:
+    ray_length: 20
+  sac_config:
+    nn: nn_nornn
+    burn_in_step: 0
+    seq_encoder: null
